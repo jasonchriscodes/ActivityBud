@@ -1,18 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
 namespace Persistence.Migrations
 {
     public partial class PhotoEntityAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "isCancelled",
-                table: "Activities",
-                newName: "IsCancelled");
-
             migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
@@ -29,7 +22,8 @@ namespace Persistence.Migrations
                         name: "FK_Photos_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -42,11 +36,6 @@ namespace Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Photos");
-
-            migrationBuilder.RenameColumn(
-                name: "IsCancelled",
-                table: "Activities",
-                newName: "isCancelled");
         }
     }
 }

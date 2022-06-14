@@ -1,33 +1,34 @@
-﻿using Domain;
-using Microsoft.EntityFrameworkCore;
+using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
- public class DataContext : IdentityDbContext<AppUser>
- {
-  public DataContext() { }
-  public DataContext(DbContextOptions options) : base(options) { }
-  protected override void OnConfiguring(DbContextOptionsBuilder options)
-  {
-   if (!options.IsConfigured)
-   {
-    options.UseSqlite("A FALLBACK CONNECTION STRING");
-   }
-  }
+    public class DataContext : IdentityDbContext<AppUser>
+    {
+        public DataContext(DbContextOptions options) : base(options)
+        {
+        }
 
-  public DbSet<Activity> Activities { get; set; } // database table
-  public DbSet<ActivityAttendee> ActivityAttendees { get; set; } // database table
-  public DbSet<Photo> Photos { get; set; } // database table
-  protected override void OnModelCreating(ModelBuilder builder)
-  {
-   base.OnModelCreating(builder);
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
-   builder.Entity<ActivityAttendee>(x => x.HasKey(aa => new { aa.AppUserId, aa.ActivityId }));
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-   builder.Entity<ActivityAttendee>().HasOne(u => u.AppUser).WithMany(a => a.Activities).HasForeignKey(aa => aa.AppUserId);
+            builder.Entity<ActivityAttendee>(x => x.HasKey(aa => new {aa.AppUserId, aa.ActivityId}));
 
-   builder.Entity<ActivityAttendee>().HasOne(u => u.Activity).WithMany(a => a.Attendees).HasForeignKey(aa => aa.ActivityId);
-  }
- }
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Activities)
+                .HasForeignKey(aa => aa.AppUserId);
+
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.Attendees)
+                .HasForeignKey(aa => aa.ActivityId);
+        }
+    }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
 namespace Persistence.Migrations
 {
     public partial class AddCancelledProperty : Migration
@@ -9,7 +7,7 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "isCancelled",
+                name: "IsCancelled",
                 table: "Activities",
                 type: "INTEGER",
                 nullable: false,
@@ -19,7 +17,7 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "isCancelled",
+                name: "IsCancelled",
                 table: "Activities");
         }
     }
