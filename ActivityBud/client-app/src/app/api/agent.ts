@@ -93,11 +93,13 @@ const Profiles = {
     let formData = new FormData();
     formData.append("File", file);
     return axios.post<Photo>("photos", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { "Content-type": "multipart/form-data" },
     });
   },
   setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
   deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+  updateProfile: (profile: Partial<Profile>) =>
+    requests.put(`/profiles`, profile),
 };
 
 const agent = {
