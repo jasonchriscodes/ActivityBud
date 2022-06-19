@@ -7,6 +7,7 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import CommonStore from "../../../app/stores/commonStore";
 import { useStore } from "../../../app/stores/store";
 import * as Yup from "yup";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
   activityId: string;
@@ -43,7 +44,7 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                   {comment.displayName}
                 </Comment.Author>
                 <Comment.Metadata>
-                  <div>{comment.createdAt}</div>
+                  <div>{formatDistanceToNow(comment.createdAt)} ago</div>
                 </Comment.Metadata>
                 <Comment.Text style={{ whiteSpace: "pre-wrap" }}>
                   {comment.body}
