@@ -45,7 +45,9 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                 <Comment.Metadata>
                   <div>{comment.createdAt}</div>
                 </Comment.Metadata>
-                <Comment.Text>{comment.body}</Comment.Text>
+                <Comment.Text style={{ whiteSpace: "pre-wrap" }}>
+                  {comment.body}
+                </Comment.Text>
               </Comment.Content>
             </Comment>
           ))}
