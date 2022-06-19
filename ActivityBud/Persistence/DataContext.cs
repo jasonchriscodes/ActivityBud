@@ -31,10 +31,10 @@ namespace Persistence
        .WithMany(a => a.Attendees)
        .HasForeignKey(aa => aa.ActivityId);
 
-    builder.Entity<Comment>()
-        .HasOne(a => a.Activity)
-        .WithMany(c => c.Comments)
-        .OnDelete(DeleteBehavior.Cascade);
+   builder.Entity<Comment>()
+       .HasOne(a => a.Activity)
+       .WithMany(c => c.Comments)
+       .OnDelete(DeleteBehavior.Cascade);
   }
  }
 }
