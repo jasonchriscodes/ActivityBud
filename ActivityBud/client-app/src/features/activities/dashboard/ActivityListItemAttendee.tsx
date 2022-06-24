@@ -14,7 +14,7 @@ export default observer(function ActivityListItemAttendee({
 }: Props) {
   const styles = {
     borderColor: "orange",
-    borderWidth: 2,
+    borderWidth: 3,
   };
 
   return (

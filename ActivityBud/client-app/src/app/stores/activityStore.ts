@@ -192,6 +192,10 @@ export default class ActivityStore {
     }
   };
 
+  clearSelectedActivity = () => {
+    this.selectedActivity = undefined;
+  };
+
   updateAttendeeFollowng = (username: string) => {
     this.activityRegistry.forEach((activity) => {
       activity.attendees.forEach((attendee) => {
