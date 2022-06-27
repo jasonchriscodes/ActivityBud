@@ -47,8 +47,7 @@ export default observer(function ProfileActivities() {
                 key={activity.id}
               >
                 <Image
-                  src={`/assets/categoryImages/$
-{activity.category}.jpg`}
+                  src={`/assets/categoryImages/${activity.category}.jpg`}
                   style={{ minHeight: 100, objectFit: "cover" }}
                 />
                 <Card.Content>
