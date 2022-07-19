@@ -6,6 +6,8 @@ import { store } from "./store";
 
 export default class UserStore {
   user: User | null = null;
+  fbAcccessToken: string | null = null;
+  fbLoading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -62,14 +64,41 @@ export default class UserStore {
   setDisplayName = (name: string) => {
     if (this.user) this.user.displayName = name;
   };
+
+  getFacebookLoginStatus = async () => {
+    window.FB.getLoginStatus((response) => {
+      if (response.status === "connected") {
+        this.fbAcccessToken = response.authResponse.accessToken;
+      }
+    });
+  };
+
   facebookLogin = () => {
-    window.FB.login(
-      (response) => {
-        agent.Account.fbLogin(response.authResponse.accessToken).then((user) =>
-          console.log(user)
-        );
-      },
-      { scope: "public_profile,email" }
-    );
+    this.fbLoading = true;
+    const apiLogin = (accessToken: string) => {
+      agent.Account.fbLogin(accessToken)
+        .then((user) => {
+          store.commonStore.setToken(user.token);
+          runInAction(() => {
+            this.user = user;
+            this.fbLoading = false;
+          });
+          history.push("/activities");
+        })
+        .catch((error) => {
+          console.log(error);
+          runInAction(() => (this.fbLoading = false));
+        });
+    };
+    if (this.fbAcccessToken) {
+      apiLogin(this.fbAcccessToken);
+    } else {
+      window.FB.login(
+        (response) => {
+          apiLogin(response.authResponse.accessToken);
+        },
+        { scope: "public_profile,email" }
+      );
+    }
   };
 }

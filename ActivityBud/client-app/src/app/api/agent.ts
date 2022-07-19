@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { access } from "fs";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Activity, ActivityFormValues } from "../models/activity";

@@ -23,12 +23,12 @@ namespace API.Controllers
   private readonly UserManager<AppUser> _userManager;
   private readonly SignInManager<AppUser> _signInManager;
   private readonly TokenService _tokenService;
-  private readonly IConfiguration config;
+  private readonly IConfiguration _config;
   private readonly HttpClient _httpClient;
   public AccountController(UserManager<AppUser> userManager,
   SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config)
   {
-   this.config = config;
+   _config = config;
    _tokenService = tokenService;
    _signInManager = signInManager;
    _userManager = userManager;
@@ -100,10 +100,11 @@ namespace API.Controllers
   [HttpPost("fbLogin")]
   public async Task<ActionResult<UserDto>> FacebookLogin(string accessToken)
   {
-   var fbVerifyKeys = this.config["Facebook:AppId"] + "|" + this.config["Facebook:AppSecret"];
+   var fbVerifyKeys = _config["Facebook:AppId"] + "|" + _config["Facebook:AppSecret"];
 
    var verifyToken = await _httpClient
-   .GetAsync($"debug_token?input_token={accessToken}&access_token={fbVerifyKeys}");
+   .GetAsync($"debug_token?input_token={accessToken}");
+
 
    if (!verifyToken.IsSuccessStatusCode) return Unauthorized();
 
@@ -117,7 +118,8 @@ namespace API.Controllers
 
    var username = (string)fbInfo.id;
 
-   var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == username);
+   var user = await _userManager.Users.Include(p => p.Photos)
+       .FirstOrDefaultAsync(x => x.UserName == username);
 
    if (user != null) return CreateUserObject(user);
 
@@ -126,15 +128,13 @@ namespace API.Controllers
     DisplayName = (string)fbInfo.name,
     Email = (string)fbInfo.email,
     UserName = (string)fbInfo.id,
-    Photos = new List<Photo>
-        {
-            new Photo
-            {
-            Id = "fb_" + (string)fbInfo.id,
-            Url = (string)fbInfo.picture.data.url,
-            IsMain = true
-            }
-        }
+    Photos = new List<Photo>{
+     new Photo{
+      Id = "fb_" + (string)fbInfo.id,
+      Url = (string)fbInfo.picture.data.url,
+      IsMain = true
+     }
+    }
    };
 
    var result = await _userManager.CreateAsync(user);
